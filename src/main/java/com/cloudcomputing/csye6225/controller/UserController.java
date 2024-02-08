@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/v1/user/self")
-    public ResponseEntity<UserDetailsResponseDto> getUserDetailsApi(HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> getUserDetailsApi(HttpServletRequest request) throws Exception {
         return userService.getUserDetails(request);
     }
 
