@@ -1,7 +1,7 @@
-package com.cloudcomputing.csye6225.Controller;
+package com.cloudcomputing.csye6225.controller;
 
-import com.cloudcomputing.csye6225.Service.DatabaseHealthCheckService;
-import com.cloudcomputing.csye6225.Utils.CommonUtil;
+import com.cloudcomputing.csye6225.service.DatabaseHealthCheckService;
+import com.cloudcomputing.csye6225.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,5 +33,6 @@ public class DatabaseHealthCheckController {
     public ResponseEntity<Void> databaseHealthCheckOptionsApi(HttpServletRequest request) {
         return databaseHealthCheckService.checkDatabaseConnection(request);
     }
+
 
 }

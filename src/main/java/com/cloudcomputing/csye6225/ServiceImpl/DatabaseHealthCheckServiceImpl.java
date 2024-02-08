@@ -1,8 +1,10 @@
-package com.cloudcomputing.csye6225.ServiceImpl;
+package com.cloudcomputing.csye6225.serviceImpl;
 
-import com.cloudcomputing.csye6225.Service.DatabaseHealthCheckService;
-import com.cloudcomputing.csye6225.Utils.CommonUtil;
+import com.cloudcomputing.csye6225.service.DatabaseHealthCheckService;
+import com.cloudcomputing.csye6225.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.sql.SQLException;
 
 @Service
 public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseHealthCheckServiceImpl.class);
 
     @Autowired
     private DataSource dataSource;
@@ -32,13 +36,20 @@ public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckServic
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
+        return this.isDatabaseConnected();
+
+    }
+
+    @Override
+    public ResponseEntity<Void> isDatabaseConnected() {
         // Check Database Connection using dataSource
         try (Connection connection = dataSource.getConnection()) {
             if (null != connection)
                 return ResponseEntity.status(HttpStatus.OK).headers(CommonUtil.setHeaders()).body(null);
-            else return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
+            else
+                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            logger.error("SQLException: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
     }
