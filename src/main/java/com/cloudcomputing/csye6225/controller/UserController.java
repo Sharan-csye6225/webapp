@@ -1,6 +1,5 @@
 package com.cloudcomputing.csye6225.controller;
 
-import com.cloudcomputing.csye6225.dtos.UserDetailsResponseDto;
 import com.cloudcomputing.csye6225.model.User;
 import com.cloudcomputing.csye6225.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;

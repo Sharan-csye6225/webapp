@@ -11,8 +11,4 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     boolean existsByUsername(String username);
 
-   /* @Modifying
-    @Query("UPDATE User u SET u.firstName = ?1, u.lastName = ?2, u.password = ?3 where u.username = ?4")
-    void updateUserDetailsByUsername(String firstname, String lastname, String password, String username);*/
-
 }
