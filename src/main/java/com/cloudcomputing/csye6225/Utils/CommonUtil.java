@@ -1,4 +1,4 @@
-package com.cloudcomputing.csye6225.Utils;
+package com.cloudcomputing.csye6225.utils;
 
 import org.springframework.http.HttpHeaders;
 
@@ -11,7 +11,6 @@ public class CommonUtil {
         headers.add(HttpHeaders.PRAGMA, "no-cache");
         headers.set("X-Content-Type-Options", "nosniff");
         headers.setDate(System.currentTimeMillis());
-        headers.setContentLength(0);
         return headers;
     }
 

@@ -31,3 +31,4 @@ HELP.md
 .idea/vcs.xml
 .env
 target/classes/application.properties
+.idea/workspace.xml
