@@ -2,8 +2,6 @@ package com.cloudcomputing.csye6225.dtos;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 
 @Data
 public class UserDetailsResponseDto {
