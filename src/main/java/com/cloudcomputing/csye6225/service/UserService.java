@@ -9,7 +9,7 @@ public interface UserService {
 
     ResponseEntity<?> createNewUser(User user, HttpServletRequest request) throws Exception;
 
-    ResponseEntity<UserDetailsResponseDto> getUserDetails(HttpServletRequest request) throws Exception;
+    ResponseEntity<?> getUserDetails(HttpServletRequest request) throws Exception;
 
     ResponseEntity<String> updateUserDetails(User user, HttpServletRequest request) throws Exception;
 

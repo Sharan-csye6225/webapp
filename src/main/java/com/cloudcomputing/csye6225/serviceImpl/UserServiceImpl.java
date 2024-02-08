@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserDetailsResponseDto> getUserDetails(HttpServletRequest request) {
+    public ResponseEntity<?> getUserDetails(HttpServletRequest request) {
 
         if (request.getContentLengthLong() > 0 || request.getQueryString() != null) {
             logger.info("The GET request had payload or request parameters which is not allowed!");
@@ -95,38 +95,6 @@ public class UserServiceImpl implements UserService {
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-       /* if (header != null && header.startsWith("Basic ")) {
-            String base64Credentials = header.substring("Basic ".length()).trim();
-            String credentials = new String(Base64.getDecoder().decode(base64Credentials));
-            final String[] values = credentials.split(":", 2);
-
-            String username = values[0];
-            String password = values[1];
-
-            User userFromDb = userRepository.findByUsername(username);
-            if (null != userFromDb) {
-                if (passwordEncoder.matches(password, userFromDb.getPassword())) {
-                    try {
-                        UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(userFromDb.getId(), userFromDb.getFirstName(), userFromDb.getLastName(),
-                                userFromDb.getUsername(), userFromDb.getAccountCreated(), userFromDb.getAccountUpdated());
-                        return ResponseEntity.status(HttpStatus.OK).headers(CommonUtil.setHeaders()).body(userCreationResponseDto);
-                    } catch (Exception e) {
-                        logger.error("Exception Occurred while retrieving user data from the DB: {}" + e.getMessage());
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
-                    }
-                } else {
-                    logger.info("The password did not match with any users present in the DB.");
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(null);
-                }
-            } else {
-                logger.info("The Username or Password was not given.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
-            }
-        } else {
-            logger.info("User doesn't exists.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
-        }*/
-
         User userFromDb = this.isBasicAuthenticated(request);
         if (null != userFromDb) {
             try {
@@ -138,8 +106,8 @@ public class UserServiceImpl implements UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
             }
         } else {
-            logger.info("The password did not match with any users present in the DB.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(null);
+            logger.info("The Authentication failed.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body("Username / Password is incorrect");
         }
     }
 
