@@ -82,6 +82,8 @@ sudo systemctl enable mysqld
 # To set password for the root user
 ALTER USER 'root'@'localhost' IDENTIFIED BY ‘root’;
 FLUSH PRIVILEGES;
-exit
+exit;
+
+
 
 
