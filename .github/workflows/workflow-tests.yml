@@ -14,7 +14,7 @@ jobs:
         image: mysql:latest
         env:
           MySQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORDD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
           MYSQL_DATABASE: csyeDB
         ports:
           - 3306:3306
