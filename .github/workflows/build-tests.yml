@@ -13,17 +13,17 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MySQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
-            MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
-            MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
-            MYSQL_HOST: ${{ secrets.MYSQL_DB_HOST }}
-            MYSQL_PORT: ${{ secrets.MYSQL_DB_PORT }}
+          MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
+          MYSQL_DB_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
+          MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
+          MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
+          MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code repository
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
@@ -37,12 +37,11 @@ jobs:
           sudo apt update
           sudo apt install maven -y
 
-      # Wait for MySQL to start
       - name: Wait for MySQL
         run: |
           echo "Waiting for MySQL to start..."
           sleep 15
 
-      - name: Build with Maven
+      - name: Build Application with Maven
         run: |
           mvn clean install -DskipTests

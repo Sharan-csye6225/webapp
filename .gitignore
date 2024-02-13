@@ -30,5 +30,5 @@ HELP.md
 .idea/misc.xml
 .idea/vcs.xml
 .env
-target/classes/application.properties
-.idea/workspace.xml
+target/*
+.idea/*
