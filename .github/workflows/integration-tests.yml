@@ -23,7 +23,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout code repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
@@ -57,5 +57,5 @@ jobs:
           MYSQL_PORT: ${{ secrets.MYSQL_DB_PORT }}
 
       - name: Integration Test with Maven
-      run: |
-        mvn test -Dtest=UserIntegrationTest
+        run: |
+          mvn test -Dtest=UserIntegrationTest
