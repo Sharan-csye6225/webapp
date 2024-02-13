@@ -12,7 +12,7 @@ public class UserIntegrationTest {
     @Test
     public void testCreateUserDetailsAndValidateUserDetails() {
 
-        // Create a User record
+        // Create an User record
         given()
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"jane.doe@example.com\" }")
