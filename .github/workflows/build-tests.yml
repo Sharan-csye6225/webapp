@@ -1,4 +1,4 @@
-name: Java Build with MySQL
+name: Application Build Tests with MySQL
 
 on:
   pull_request:
@@ -14,14 +14,16 @@ jobs:
         image: mysql:latest
         env:
           MySQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
-          MYSQL_DATABASE: csyeDB
+            MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
+            MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
+            MYSQL_HOST: ${{ secrets.MYSQL_DB_HOST }}
+            MYSQL_PORT: ${{ secrets.MYSQL_DB_PORT }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code repository
       uses: actions/checkout@v2
 
     - name: Set up JDK 17
