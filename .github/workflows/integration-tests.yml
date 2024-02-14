@@ -39,7 +39,7 @@ jobs:
           echo "Waiting for MySQL server to start..."
           sleep 15
 
-      - name: Build with Maven
+      - name: Build SpringBoot Application with Maven
         run: |
           mvn spring-boot:run
 
