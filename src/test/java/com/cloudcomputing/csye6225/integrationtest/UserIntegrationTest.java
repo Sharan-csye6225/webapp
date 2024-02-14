@@ -20,7 +20,7 @@ public class UserIntegrationTest {
         RestAssured.port = port;
         RestAssured.baseURI = "http://localhost";
 
-        // Create an User record
+        // Create a User record
         given()
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"jane.doe@example.com\" }")
