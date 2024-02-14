@@ -24,11 +24,6 @@ hs_err_pid*
 replay_pid*
 .DS_Store
 HELP.md
-.idea/compiler.xml
-.idea/encodings.xml
-.idea/jarRepositories.xml
-.idea/misc.xml
-.idea/vcs.xml
+.idea/*
 .env
-target/classes/application.properties
-.idea/workspace.xml
+/target/*
