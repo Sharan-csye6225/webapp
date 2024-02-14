@@ -49,7 +49,7 @@ jobs:
 
       - name: Check MySQL Authentication
         run: |
-          mysql --host=${MYSQL_HOST} --port=${MYSQL_PORT} --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --execute='SHOW DATABASES;'
+          mysql --host=${MYSQL_DB_HOST} --port=${MYSQL_DB_PORT} --user=${MYSQL_DB_USERNAME} --password=${MYSQL_DB_PASSWORD} --execute='SHOW DATABASES;'
         env:
           MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
           MYSQL_DB_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
