@@ -54,6 +54,6 @@ jobs:
           MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
 
       - name: Integration Test with Maven
-      run: |
-        mvn test -Dtest=UserIntegrationTest
+        run: |
+          mvn test -Dtest=UserIntegrationTest
         
