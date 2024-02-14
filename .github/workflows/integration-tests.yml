@@ -39,20 +39,7 @@ jobs:
           echo "Waiting for MySQL server to start..."
           sleep 15
 
-      - name: Build SpringBoot Application with Maven
+      - name: Run Integration Test with Maven
         run: |
-          mvn spring-boot:run
+          mvn test -Dtest=UserIntegrationTest
 
-      - name: Check MySQL Authentication
-        run: |
-          mysql --host=${MYSQL_DB_HOST} --port=${MYSQL_DB_PORT} --user=${MYSQL_DB_USERNAME} --password=${MYSQL_DB_PASSWORD} --execute='SHOW DATABASES;'
-        env:
-          MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
-          MYSQL_DB_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
-          MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
-          MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
-          MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
-
-      - name: Integration Test with Maven
-      run: |
-        mvn test -Dtest=UserIntegrationTest

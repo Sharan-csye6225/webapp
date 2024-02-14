@@ -1,23 +1,32 @@
 package com.cloudcomputing.csye6225.integrationtest;
 
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserIntegrationTest {
 
-    private static final String BASE_URL = "http://localhost:8080/v1/user";
+    @LocalServerPort
+    private int port;
 
     @Test
     public void testCreateUserDetailsAndValidateUserDetails() {
+
+        RestAssured.port = port;
+        RestAssured.baseURI = "http://localhost";
 
         // Create an User record
         given()
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"jane.doe@example.com\" }")
                 .when()
-                .post(BASE_URL)
+                .post("/v1/user")
                 .then()
                 .statusCode(201);
 
@@ -25,7 +34,7 @@ public class UserIntegrationTest {
         given()
                 .auth().preemptive().basic("jane.doe@example.com", "test")
                 .when()
-                .get(BASE_URL + "/self")
+                .get("/v1/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane"))
@@ -41,7 +50,7 @@ public class UserIntegrationTest {
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane_changed\", \"last_name\": \"Doe_changed\", \"password\": \"test_changed\" }")
                 .when()
-                .put(BASE_URL + "/self")
+                .put("/v1/user/self")
                 .then()
                 .statusCode(204);
 
@@ -49,7 +58,7 @@ public class UserIntegrationTest {
         given()
                 .auth().preemptive().basic("jane.doe@example.com", "test_changed")
                 .when()
-                .get(BASE_URL + "/self")
+                .get("/v1/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane_changed"))
