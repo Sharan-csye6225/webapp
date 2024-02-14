@@ -1,4 +1,4 @@
-name: Integration Tests with MySQL
+name: Integration Tests with Maven and MySQL
 
 on:
   pull_request:
