@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         User userFromDb = this.isBasicAuthenticated(request);
 
         if (null != userFromDb) {
-            if (StringUtils.isAllEmpty(user.getUsername(), user.getAccountCreated(), user.getAccountUpdated())) {
+            if (StringUtils.isAllEmpty(user.getUsername(), user.getAccountCreated(), user.getAccountUpdated()) && !user.getFirstName().isBlank() && !user.getLastName().isBlank() && !user.getPassword().isBlank()) {
                 try {
                     //userRepository.updateUserDetailsByUsername(user.getFirstName(), user.getLastName(), passwordEncoder.encode(user.getPassword()), userFromDb.getUsername());
                     if (!StringUtils.isEmpty(user.getFirstName()))
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 }
             } else {
                 logger.info("Invalid Request Body - Restricted field values are tried to be updated.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body("Updating unauthorized fields is not allowed.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body("Invalid Request Body.");
             }
         } else {
             logger.info("The Authentication failed.");
