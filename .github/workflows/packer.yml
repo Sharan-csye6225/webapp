@@ -63,9 +63,9 @@ jobs:
           export_default_credentials: true
 
       - name: Setup Packer
-          uses: hashicorp/setup-packer@main
-          with:
-            packer_version: '1.8.6'
+        uses: hashicorp/setup-packer@main
+        with:
+          packer_version: '1.8.6'
 
 
       - name: Initialize Packer
