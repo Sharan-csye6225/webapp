@@ -1,4 +1,4 @@
-name: Validate Packer
+name: Install and Validate Packer
 
 on:
   pull_request:
