@@ -70,12 +70,15 @@ jobs:
 
       - name: Initialize Packer
         run: |
-          packer init ./packer/main.pkr.hcl
+          cd packer
+          packer init .
 
       - name: Format check Packer
         run: |
-          packer fmt -check ./packer/main.pkr.hcl
+          cd packer
+          packer fmt -check .
 
       - name: Validate Packer
         run: |
-          packer validate ./packer/main.pkr.hcl
+          cd packer
+          packer validate .
