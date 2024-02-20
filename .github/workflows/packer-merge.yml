@@ -16,10 +16,8 @@ jobs:
 
       - name: Set up MySQL
         run: |
-          sudo yum install -y mysql-server
-          echo "MySQL install completed"
-          sudo systemctl start mysqld
-          sudo systemctl enable mysqld
+          sudo systemctl start mysql
+          sudo systemctl status mysql
           sudo mysql -u root <<EOF
           ALTER USER 'root'@'localhost' IDENTIFIED BY '${{ secrets.MYSQL_DB_PASSWORD }}';
           FLUSH PRIVILEGES;
