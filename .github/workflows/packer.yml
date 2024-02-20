@@ -68,7 +68,7 @@ jobs:
 
       - name: Use gcloud CLI
         run: 'gcloud info'
-
+        
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
         with:
