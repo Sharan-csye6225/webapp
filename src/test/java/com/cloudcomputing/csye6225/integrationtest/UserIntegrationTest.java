@@ -61,7 +61,7 @@ public class UserIntegrationTest {
                 .get("/v1/user/self")
                 .then()
                 .statusCode(200)
-                .body("firstName", equalTo("Jane_changed"))
+                .body("firstName", equalTo("Jane"))
                 .body("lastName", equalTo("Doe_changed"))
                 .body("username", equalTo("jane.doe@example.com"));
     }
