@@ -12,7 +12,7 @@ source "googlecompute" "custom_image_builder" {
   source_image_family     = var.source_image_family
   zone                    = var.gcp_zone
   ssh_username            = var.ssh_username
-  network          = var.network
+  network                 = var.network
   image_name              = "${var.image_name}-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   image_description       = var.image_description
   image_storage_locations = var.image_storage_locations
