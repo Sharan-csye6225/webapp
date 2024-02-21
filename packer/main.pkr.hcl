@@ -29,6 +29,7 @@ locals {
 source "googlecompute" "custom_image_builder" {
   project_id              = var.gcp_project_id
   source_image_family     = "centos-stream-8"
+  image_family            = "custom-family"
   zone                    = var.gcp_zone
   ssh_username            = var.ssh_username
   network                 = "default"
