@@ -38,9 +38,9 @@ jobs:
           cp cloud/*.jar packer
           cd packer && ls -al
         env:
-          MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
+          MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAM }}
           MYSQL_DB_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
-          MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
+          MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABAS }}
           MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
           MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
 
