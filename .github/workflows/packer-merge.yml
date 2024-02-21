@@ -74,20 +74,20 @@ jobs:
       - name: Initialize Packer
         run: |
           cd packer
-          packer init .
+          sudo packer init .
 
       - name: Format check Packer
         run: |
           cd packer
-          packer fmt -check .
+          sudo packer fmt -check .
 
       - name: Validate Packer
         run: |
           cd packer
-          packer validate .
+          sudo packer validate .
 
       - name: Build Packer
         run: |
           cd packer
-          packer build .
+          sudo packer build .
             
