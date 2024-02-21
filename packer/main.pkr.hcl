@@ -48,6 +48,7 @@ build {
   provisioner "shell" {
     script = "nologin-user-creation.sh"
   }
+
 }
 
 
