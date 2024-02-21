@@ -80,7 +80,13 @@ jobs:
       - name: Format check Packer
         run: |
           cd packer
+          CHANGES=$(git diff --name-only)
           packer fmt -check .
+          if [ $? -ne 0 ]; then
+            echo "Packer template was modified by 'packer fmt' command."
+            echo "$CHANGES"
+            exit 1
+          fi
 
       - name: Validate Packer
         run: |
