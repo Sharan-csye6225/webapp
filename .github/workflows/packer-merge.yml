@@ -39,7 +39,7 @@ jobs:
             cp cloud/*.jar packer
             cd packer && ls -al
           env:
-            MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
+            MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAM }}
             MYSQL_DB_PASSWORD: ${{ secrets.MYSQL_DB_PASSWORD }}
             MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
             MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
@@ -80,12 +80,20 @@ jobs:
         - name: Format check Packer
           run: |
             cd packer
+            CHANGES=$(git diff --name-only)
             packer fmt -check .
+            if [ $? -ne 0 ]; then
+              echo "Packer template was modified by 'packer fmt' command."
+              echo "$CHANGES"
+            fi
 
         - name: Validate Packer
           run: |
             cd packer
             packer validate .
+            if [ $? -ne 0 ]; then
+              echo "Packer template validation failed."
+            fi
 
         - name: Check if any job failed
           if: ${{ failure() }}
