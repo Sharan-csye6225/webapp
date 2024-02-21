@@ -80,6 +80,5 @@ build {
       "echo '****** Copied webservice *******'"
     ]
   }
-
 }
 
