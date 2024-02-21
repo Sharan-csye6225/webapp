@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Intallation Depedency Script file execution started."
 
-sudo yum update -y
+#sudo yum update -y
 
 sudo yum install -y mysql-server
 
