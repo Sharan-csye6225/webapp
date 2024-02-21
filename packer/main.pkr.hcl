@@ -9,7 +9,7 @@ packer {
 
 variable "gcp_project_id" {
   type    = string
-  default = "temporal-storm-414008"
+  default = "csye6225-414009"
 }
 
 variable "gcp_zone" {
