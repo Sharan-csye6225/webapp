@@ -23,7 +23,7 @@ locals {
 }
 
 build {
-  name    = var.build-name
+  name    = var.build_name
   sources = ["source.googlecompute.custom_image_builder"]
 
   provisioner "shell" {
