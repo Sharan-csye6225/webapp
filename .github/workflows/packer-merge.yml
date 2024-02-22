@@ -90,16 +90,16 @@ jobs:
             echo "Packer template validation failed."
           fi
         env:
-        PKR_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
-        PKR_VAR_gcp_zone: ${{ secrets.GCP_ZONE }}
-        PKR_VAR_ssh_username : ${{ secrets.PACKER_SSH_USERNAME }}
-        PKR_VAR_source_image_family: ${{ secrets.SOURCE_IMAGE_FAMILY }}
-        PKR_VAR_network: ${{ secrets.NETWORK }}
-        PKR_VAR_image_storage_locations: ${{ secrets.IMAGE_STORAGE_LOCATIONS }}
-        PKR_VAR_image_name: ${{ secrets.IMAGE_NAME }}
-        PKR_VAR_image_family: ${{ secrets.IMAGE_FAMILY }}
-        PKR_VAR_image_description : ${{ secrets.IMAGE_DESCRIPTION }}
-        PKR_VAR_build_name : ${{ secrets.BUILD_NAME }}
+          PKR_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          PKR_VAR_gcp_zone: ${{ secrets.GCP_ZONE }}
+          PKR_VAR_ssh_username : ${{ secrets.PACKER_SSH_USERNAME }}
+          PKR_VAR_source_image_family: ${{ secrets.SOURCE_IMAGE_FAMILY }}
+          PKR_VAR_network: ${{ secrets.NETWORK }}
+          PKR_VAR_image_storage_locations: ${{ secrets.IMAGE_STORAGE_LOCATIONS }}
+          PKR_VAR_image_name: ${{ secrets.IMAGE_NAME }}
+          PKR_VAR_image_family: ${{ secrets.IMAGE_FAMILY }}
+          PKR_VAR_image_description : ${{ secrets.IMAGE_DESCRIPTION }}
+          PKR_VAR_build_name : ${{ secrets.BUILD_NAME }}
 
       - name: Check if any job failed
         if: ${{ failure() }}
