@@ -24,6 +24,7 @@ variable "image_name" {
 
 variable "image_description" {
   type = string
+  default =  ""
 }
 
 variable "image_storage_locations" {
