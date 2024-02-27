@@ -23,8 +23,8 @@ variable "image_name" {
 }
 
 variable "image_description" {
-  type = string
-  default =  ""
+  type    = string
+  default = ""
 }
 
 variable "image_storage_locations" {
@@ -35,6 +35,6 @@ variable "image_family" {
   type = string
 }
 
-variable "build_name" {
+variable "build-name" {
   type = string
 }
