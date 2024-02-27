@@ -8,7 +8,7 @@ packer {
 }
 
 source "googlecompute" "custom_image_builder" {
-  project_id     = var.gcp_project_id
+  project_id              = var.gcp_project_i
   source_image_family     = var.source_image_family
   zone                    = var.gcp_zone
   ssh_username            = var.ssh_username
