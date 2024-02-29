@@ -34,6 +34,6 @@ variable "image_family" {
   type = string
 }
 
-variable "build_name" {
+variable "build-name" {
   type = string
 }
