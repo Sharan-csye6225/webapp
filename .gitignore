@@ -27,3 +27,4 @@ HELP.md
 .idea/*
 .env
 /target/*
+packer/variable.auto.pkrvars.hcl

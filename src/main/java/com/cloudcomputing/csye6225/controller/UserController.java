@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/v1/user/self")
-    public ResponseEntity<String> updateUserApi(@RequestBody User user, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> updateUserApi(@RequestBody User user, HttpServletRequest request) throws Exception {
         return userService.updateUserDetails(user, request);
     }
 }

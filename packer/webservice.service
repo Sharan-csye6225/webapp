@@ -1,12 +1,14 @@
 [Unit]
-Description=CSYE6225 - Webapp 
-After=syslog.target
+Description=CSYE6225 - Webapp
+After=syslog.target google-startup-scripts.service
+ConditionPathExists=/opt/cloud/.env
 
 [Service]
 Type=simple
 User=csye6225
 Group=csye6225
 WorkingDirectory=/opt/cloud
+EnvironmentFile=/opt/cloud/.env
 ExecStart=/usr/bin/java -jar /opt/cloud/csye6225-0.0.1-SNAPSHOT.jar 
 SuccessExitStatus=143
 Restart=always
