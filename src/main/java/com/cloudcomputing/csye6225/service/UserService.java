@@ -10,6 +10,6 @@ public interface UserService {
 
     ResponseEntity<?> getUserDetails(HttpServletRequest request) throws Exception;
 
-    ResponseEntity<String> updateUserDetails(User user, HttpServletRequest request) throws Exception;
+    ResponseEntity<?> updateUserDetails(User user, HttpServletRequest request) throws Exception;
 
 }

@@ -1,22 +1,6 @@
 #!/bin/bash
 echo "Intallation Depedency Script file execution started."
 
-#sudo yum update -y
-
-sudo yum install -y mysql-server
-
-echo "MySQL install completed"
-
-sudo systemctl start mysqld
-
-sudo systemctl enable mysqld
-
-sudo mysql -u root <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
-FLUSH PRIVILEGES;
-exit
-EOF
-
 sudo yum install -y java-17-openjdk-devel
 
 java -version

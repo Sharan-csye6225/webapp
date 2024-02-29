@@ -23,7 +23,7 @@ locals {
 }
 
 build {
-  name    = var.build_name
+  name    = var.build-name
   sources = ["source.googlecompute.custom_image_builder"]
 
   provisioner "shell" {
@@ -33,11 +33,6 @@ build {
   provisioner "file" {
     source      = "csye6225-0.0.1-SNAPSHOT.jar"
     destination = "/tmp/csye6225-0.0.1-SNAPSHOT.jar"
-  }
-
-  provisioner "file" {
-    source      = ".env"
-    destination = "/tmp/.env"
   }
 
   provisioner "file" {
