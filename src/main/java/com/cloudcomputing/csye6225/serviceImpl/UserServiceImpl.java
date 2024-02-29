@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Set;
 
 @Service
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
                 }
             } else {
                 logger.info("User already exists in the Database.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body("User already exists in the Database.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","User already exists in the Database."));
             }
         } else {
             logger.info("The Request doesn't have the required or has incorrect values.");
@@ -107,12 +108,12 @@ public class UserServiceImpl implements UserService {
             }
         } else {
             logger.info("The Authentication failed.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body("Username / Password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
         }
     }
 
     @Override
-    public ResponseEntity<String> updateUserDetails(User user, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> updateUserDetails(User user, HttpServletRequest request) throws Exception {
 
         if (request.getQueryString() != null) {
             logger.info("The PUT request has request parameters which is not allowed!");
@@ -145,11 +146,11 @@ public class UserServiceImpl implements UserService {
                 }
             } else {
                 logger.info("Invalid Request Body - Restricted field values are tried to be updated.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body("Invalid Request Body.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Invalid Request Body."));
             }
         } else {
             logger.info("The Authentication failed.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body("Username / Password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
         }
 
     }
