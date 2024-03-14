@@ -37,3 +37,4 @@ variable "image_family" {
 variable "build_name" {
   type = string
 }
+
