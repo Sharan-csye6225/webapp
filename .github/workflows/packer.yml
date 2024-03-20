@@ -31,6 +31,7 @@ jobs:
 
       - name: Build Application with Maven and Run Integration Test
         run: |
+          echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
           mvn clean install 
           cp cloud/*.jar packer
           cd packer && ls -al
