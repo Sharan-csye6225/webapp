@@ -12,9 +12,10 @@ jobs:
     steps:
       - name: Checkout code repository
         uses: actions/checkout@v2
+        run: pwd
 
       - name: Set up MySQL
-        run: |
+        
           sudo systemctl start mysql
           sudo systemctl status mysql
 
@@ -39,6 +40,7 @@ jobs:
           cd /var/log/
           sudo mkdir cloud/
           ls -al 
+          cd ~
           mvn test -Dtest=UserIntegrationTest
         env:
           MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
