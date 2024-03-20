@@ -1,5 +1,6 @@
 package com.cloudcomputing.csye6225.serviceImpl;
 
+import org.slf4j.Logger;
 import com.cloudcomputing.csye6225.dtos.UserDetailsResponseDto;
 import com.cloudcomputing.csye6225.model.User;
 import com.cloudcomputing.csye6225.repository.UserRepository;
@@ -10,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    Logger logger = (Logger) LoggerFactory.getLogger("jsonLogger");
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -40,6 +41,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> createNewUser(User user, HttpServletRequest request) {
+
+        logger.error("**** (error) - createNewUser - UserServiceImpl ****");
+        logger.info("**** (error) - createNewUser - UserServiceImpl ****");
+        logger.warn("**** (warn) - createNewUser - UserServiceImpl ****");
+        logger.debug("**** (debug) - createNewUser - UserServiceImpl ****");
+        logger.trace("**** (trace) - createNewUser - UserServiceImpl ****");
+
 
         if (request.getQueryString() != null) {
             logger.info("The POST request has request parameters which is not allowed!");
@@ -83,6 +91,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getUserDetails(HttpServletRequest request) {
+
+        logger.error("**** (error) - getUserDetails - UserServiceImpl ****");
+        logger.info("**** (error) - getUserDetails - UserServiceImpl ****");
+        logger.warn("**** (warn) - getUserDetails - UserServiceImpl ****");
+        logger.debug("**** (debug) - getUserDetails - UserServiceImpl ****");
+        logger.trace("**** (trace) - getUserDetails - UserServiceImpl ****");
+
 
         if (request.getContentLengthLong() > 0 || request.getQueryString() != null) {
             logger.info("The GET request had payload or request parameters which is not allowed!");
