@@ -39,5 +39,4 @@ public class DatabaseHealthCheckController {
         return databaseHealthCheckService.checkDatabaseConnection(request);
     }
 
-
 }
