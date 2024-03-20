@@ -36,8 +36,6 @@ jobs:
 
       - name: Run Integration Test with Maven
         run: |
-          sudo mkdir /var/log/cloud/
-          sudo chmod 750 /var/log/cloud/
           mvn test -Dtest=UserIntegrationTest
         env:
           MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
