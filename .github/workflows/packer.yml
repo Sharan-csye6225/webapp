@@ -31,6 +31,7 @@ jobs:
 
       - name: Build Application with Maven and Run Integration Test
         run: |
+          echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
           mvn clean install
           pwd
           mkdir cloud && cp target/csye6225-0.0.1-SNAPSHOT.jar cloud   
@@ -50,6 +51,7 @@ jobs:
           echo "MYSQL_DB_DATABASE=${{ secrets.MYSQL_DB_DATABASE }}" >> .env
           echo "MYSQL_DB_HOST=${{ secrets.MYSQL_DB_HOST }}" >> .env
           echo "MYSQL_DB_PORT=${{ secrets.MYSQL_DB_PORT }}" >> .env
+          echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
           cat .env
           cp .env packer
           cd packer && ls -al

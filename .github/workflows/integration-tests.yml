@@ -36,6 +36,7 @@ jobs:
 
       - name: Run Integration Test with Maven
         run: |
+          echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
           mvn test -Dtest=UserIntegrationTest
         env:
           MYSQL_DB_USERNAME: ${{ secrets.MYSQL_DB_USERNAME }}
