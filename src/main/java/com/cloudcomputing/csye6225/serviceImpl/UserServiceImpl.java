@@ -42,20 +42,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> createNewUser(User user, HttpServletRequest request) {
 
-        logger.error("**** (error) - createNewUser - UserServiceImpl ****");
-        logger.info("**** (error) - createNewUser - UserServiceImpl ****");
-        logger.warn("**** (warn) - createNewUser - UserServiceImpl ****");
-        logger.debug("**** (debug) - createNewUser - UserServiceImpl ****");
-        logger.trace("**** (trace) - createNewUser - UserServiceImpl ****");
+        logger.debug("**** UserServiceImpl:createNewUser - 'IN' ****");
 
 
         if (request.getQueryString() != null) {
-            logger.info("The POST request has request parameters which is not allowed!");
+            logger.error("UserServiceImpl:createNewUser - POST request should not have query params [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
         if (databaseHealthCheckService.isDatabaseConnected().getStatusCode() != HttpStatus.OK) {
-            logger.info("The Database connection Failed!");
+            logger.error("UserServiceImpl:createNewUser - The Database connection Failed! [ {} ]", HttpStatus.SERVICE_UNAVAILABLE);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
 
@@ -73,17 +69,18 @@ public class UserServiceImpl implements UserService {
                     User createdUser = userRepository.save(user);
                     UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(createdUser.getId(), createdUser.getFirstName(), createdUser.getLastName(),
                             createdUser.getUsername(), createdUser.getAccountCreated(), createdUser.getAccountUpdated());
+                    logger.info("UserServiceImpl:createNewUser - User details created and stored in the DB:  [ {} ]", HttpStatus.CREATED);
                     return ResponseEntity.status(HttpStatus.CREATED).headers(CommonUtil.setHeaders()).body(userCreationResponseDto);
                 } catch (Exception e) {
-                    logger.error("Exception Occurred while creating and storing user in the DB: {}", e.getMessage());
+                    logger.error("UserServiceImpl:createNewUser - Exception Occurred while creating and storing user in the DB: {}", e.getMessage());
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                logger.info("User already exists in the Database.");
+                logger.error("UserServiceImpl:createNewUser - User already exists in the Database. [ {} ]", HttpStatus.BAD_REQUEST);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","User already exists in the Database."));
             }
         } else {
-            logger.info("The Request doesn't have the required or has incorrect values.");
+            logger.error("UserServiceImpl:createNewUser - The Request doesn't have the required or has incorrect values. [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
@@ -92,20 +89,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> getUserDetails(HttpServletRequest request) {
 
-        logger.error("**** (error) - getUserDetails - UserServiceImpl ****");
-        logger.info("**** (error) - getUserDetails - UserServiceImpl ****");
-        logger.warn("**** (warn) - getUserDetails - UserServiceImpl ****");
-        logger.debug("**** (debug) - getUserDetails - UserServiceImpl ****");
-        logger.trace("**** (trace) - getUserDetails - UserServiceImpl ****");
-
+        logger.debug("**** UserServiceImpl:getUserDetails - 'IN' ****");
 
         if (request.getContentLengthLong() > 0 || request.getQueryString() != null) {
-            logger.info("The GET request had payload or request parameters which is not allowed!");
+            logger.error("UserServiceImpl:getUserDetails - The GET request had payload or request parameters which is not allowed! [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
         if (databaseHealthCheckService.isDatabaseConnected().getStatusCode() != HttpStatus.OK) {
-            logger.info("The Database connection Failed!");
+            logger.error("UserServiceImpl:getUserDetails - The Database connection Failed! [ {} ]", HttpStatus.SERVICE_UNAVAILABLE);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
 
@@ -116,13 +108,14 @@ public class UserServiceImpl implements UserService {
             try {
                 UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(userFromDb.getId(), userFromDb.getFirstName(), userFromDb.getLastName(),
                         userFromDb.getUsername(), userFromDb.getAccountCreated(), userFromDb.getAccountUpdated());
+                logger.info("UserServiceImpl:getUserDetails - User details are fetched from the DB:  [ {} ]", HttpStatus.OK);
                 return ResponseEntity.status(HttpStatus.OK).headers(CommonUtil.setHeaders()).body(userCreationResponseDto);
             } catch (Exception e) {
-                logger.error("Exception Occurred while retrieving user data from the DB: {}" + e.getMessage());
+                logger.error("UserServiceImpl:getUserDetails - Exception Occurred while retrieving user data from the DB: {}" + e.getMessage());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
             }
         } else {
-            logger.info("The Authentication failed.");
+            logger.warn("UserServiceImpl:getUserDetails - The Username / Password is incorrect. [ {} ]", HttpStatus.UNAUTHORIZED);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
         }
     }
@@ -130,13 +123,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> updateUserDetails(User user, HttpServletRequest request) throws Exception {
 
+        logger.debug("**** UserServiceImpl:updateUserDetails - 'IN' ****");
+
         if (request.getQueryString() != null) {
-            logger.info("The PUT request has request parameters which is not allowed!");
+            logger.error("UserServiceImpl:updateUserDetails - The PUT request has request parameters which is not allowed! [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
         if (databaseHealthCheckService.isDatabaseConnected().getStatusCode() != HttpStatus.OK) {
-            logger.info("The Database connection Failed!");
+            logger.error("UserServiceImpl:updateUserDetails - The Database connection Failed! [ {} ]", HttpStatus.SERVICE_UNAVAILABLE);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
 
@@ -145,7 +140,6 @@ public class UserServiceImpl implements UserService {
         if (null != userFromDb) {
             if (StringUtils.isAllEmpty(user.getUsername(), user.getAccountCreated(), user.getAccountUpdated()) && !user.getFirstName().isBlank() && !user.getLastName().isBlank() && !user.getPassword().isBlank()) {
                 try {
-                    //userRepository.updateUserDetailsByUsername(user.getFirstName(), user.getLastName(), passwordEncoder.encode(user.getPassword()), userFromDb.getUsername());
                     if (!StringUtils.isEmpty(user.getFirstName()))
                         userFromDb.setFirstName(user.getFirstName());
                     if (!StringUtils.isEmpty(user.getLastName()))
@@ -154,23 +148,26 @@ public class UserServiceImpl implements UserService {
                         userFromDb.setPassword(passwordEncoder.encode(user.getPassword()));
                     userFromDb.setAccountUpdated(LocalDateTime.now().toString());
                     userRepository.save(userFromDb);
+                    logger.info("UserServiceImpl:updateUserDetails - User details updated in the DB: {}", HttpStatus.NO_CONTENT);
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(CommonUtil.setHeaders()).body(null);
                 } catch (Exception e) {
-                    logger.error("Exception Occurred while updating user data in the DB: {}", e.getMessage());
+                    logger.error("UserServiceImpl:updateUserDetails - Exception Occurred while updating user data in the DB: {}", e.getMessage());
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                logger.info("Invalid Request Body - Restricted field values are tried to be updated.");
+                logger.info("UserServiceImpl:updateUserDetails -  Invalid Request Body - Restricted field values are tried to be updated. [ {} ]", HttpStatus.BAD_REQUEST);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Invalid Request Body."));
             }
         } else {
-            logger.info("The Authentication failed.");
+            logger.warn("UserServiceImpl:updateUserDetails - The Username / Password is incorrect. [ {} ]", HttpStatus.UNAUTHORIZED);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
         }
 
     }
 
     private User isBasicAuthenticated(HttpServletRequest request) {
+
+        logger.debug("**** UserServiceImpl:isBasicAuthenticated - 'IN' ****");
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
