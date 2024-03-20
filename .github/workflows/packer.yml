@@ -106,3 +106,4 @@ jobs:
           PKR_VAR_image_family: ${{ secrets.IMAGE_FAMILY }}
           PKR_VAR_image_description : ${{ secrets.IMAGE_DESCRIPTION }}
           PKR_VAR_build_name : ${{ secrets.BUILD_NAME }}
+
