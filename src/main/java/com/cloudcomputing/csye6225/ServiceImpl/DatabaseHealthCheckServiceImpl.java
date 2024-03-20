@@ -18,13 +18,20 @@ import java.sql.SQLException;
 @Service
 public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseHealthCheckServiceImpl.class);
+   // private static final Logger logger = LoggerFactory.getLogger(DatabaseHealthCheckServiceImpl.class);
+   Logger logger = LoggerFactory.getLogger("jsonLogger");
 
     @Autowired
     private DataSource dataSource;
 
     @Override
     public ResponseEntity<Void> checkDatabaseConnection(HttpServletRequest request) {
+
+        logger.error("**** (error) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
+        logger.info("**** (error) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
+        logger.warn("**** (warn) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
+        logger.debug("**** (debug) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
+        logger.trace("**** (trace) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
 
         // Check if the request method is not GET
         if (!RequestMethod.GET.name().equals(request.getMethod())) {

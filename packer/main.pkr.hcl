@@ -40,6 +40,11 @@ build {
     destination = "/tmp/"
   }
 
+  provisioner "file" {
+    source      = "config.yaml"
+    destination = "/tmp/config.yaml"
+  }
+
   provisioner "shell" {
     script = "nologin-user-creation.sh"
   }
