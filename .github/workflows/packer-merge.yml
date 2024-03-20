@@ -32,6 +32,9 @@ jobs:
 
       - name: Build Application with Maven and Run Integration Test
         run: |
+          cd /var/log/
+          sudo mkdir cloud/
+          ls -al 
           mvn clean install
           pwd
           mkdir cloud && cp target/csye6225-0.0.1-SNAPSHOT.jar cloud   
