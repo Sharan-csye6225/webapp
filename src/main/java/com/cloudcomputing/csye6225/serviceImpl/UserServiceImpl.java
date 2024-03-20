@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
 
         logger.debug("**** UserServiceImpl:createNewUser - 'IN' ****");
 
-
         if (request.getQueryString() != null) {
             logger.error("UserServiceImpl:createNewUser - POST request should not have query params [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);

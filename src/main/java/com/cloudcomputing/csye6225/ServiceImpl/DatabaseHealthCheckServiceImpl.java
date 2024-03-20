@@ -61,4 +61,5 @@ public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckServic
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
     }
+
 }

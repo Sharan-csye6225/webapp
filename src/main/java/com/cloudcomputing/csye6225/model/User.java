@@ -101,5 +101,4 @@ public class User {
         this.accountUpdated = accountUpdated;
     }
 
-
 }
