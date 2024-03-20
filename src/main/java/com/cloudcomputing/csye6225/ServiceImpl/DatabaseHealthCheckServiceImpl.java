@@ -18,8 +18,7 @@ import java.sql.SQLException;
 @Service
 public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckService {
 
-   // private static final Logger logger = LoggerFactory.getLogger(DatabaseHealthCheckServiceImpl.class);
-   Logger logger = LoggerFactory.getLogger("jsonLogger");
+    Logger logger = LoggerFactory.getLogger("jsonLogger");
 
     @Autowired
     private DataSource dataSource;
@@ -27,19 +26,17 @@ public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckServic
     @Override
     public ResponseEntity<Void> checkDatabaseConnection(HttpServletRequest request) {
 
-        logger.error("**** (error) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
-        logger.info("**** (error) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
-        logger.warn("**** (warn) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
-        logger.debug("**** (debug) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
-        logger.trace("**** (trace) Inside the checkDatabaseConnection - DatabaseHealthCheckServiceImpl ****");
+        logger.debug("**** DatabaseHealthCheckServiceImpl:checkDatabaseConnection - 'IN' ****");
 
         // Check if the request method is not GET
         if (!RequestMethod.GET.name().equals(request.getMethod())) {
+            logger.error("DatabaseHealthCheckServiceImpl:checkDatabaseConnection - Please use only GET method [ {} ]", HttpStatus.METHOD_NOT_ALLOWED);
             return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).headers(CommonUtil.setHeaders()).body(null);
         }
 
         // Check if the request includes a payload or query parameter, throw "400 Bad Request"
         if (request.getContentLengthLong() > 0 || request.getQueryString() != null) {
+            logger.error("DatabaseHealthCheckServiceImpl:checkDatabaseConnection - Request contains payload or query parameter  [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
 
@@ -51,12 +48,16 @@ public class DatabaseHealthCheckServiceImpl implements DatabaseHealthCheckServic
     public ResponseEntity<Void> isDatabaseConnected() {
         // Check Database Connection using dataSource
         try (Connection connection = dataSource.getConnection()) {
-            if (null != connection)
+            if (null != connection){
+                logger.info("Connection to the DB was successfully! [ {} ]", HttpStatus.OK);
                 return ResponseEntity.status(HttpStatus.OK).headers(CommonUtil.setHeaders()).body(null);
-            else
+            }
+            else {
+                logger.error("DatabaseHealthCheckServiceImpl:checkDatabaseConnection - Connection object is null  [ {} ]", HttpStatus.SERVICE_UNAVAILABLE);
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
+            }
         } catch (SQLException e) {
-            logger.error("SQLException: {}", e.getMessage());
+            logger.error("SQLException occurred: {} {}", HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(CommonUtil.setHeaders()).body(null);
         }
     }
