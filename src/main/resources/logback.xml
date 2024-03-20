@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <property file=".env" />
+
     <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
-        <file>var/log/cloud/webapp.log</file>
+        <file>${LOG_FILE_PATH}</file>
         <append>true</append>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
