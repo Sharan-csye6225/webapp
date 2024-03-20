@@ -12,9 +12,10 @@ jobs:
     steps:
       - name: Checkout code repository
         uses: actions/checkout@v2
+        run: pwd
 
       - name: Set up MySQL
-        
+        run: |
           sudo systemctl start mysql
           sudo systemctl status mysql
 
