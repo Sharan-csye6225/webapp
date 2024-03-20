@@ -32,7 +32,9 @@ jobs:
       - name: Build Application with Maven and Run Integration Test
         run: |
           echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
-          mvn clean install 
+          mvn clean install
+          pwd
+          mkdir cloud && cp target/csye6225-0.0.1-SNAPSHOT.jar cloud   
           cp cloud/*.jar packer
           cd packer && ls -al
         env:
