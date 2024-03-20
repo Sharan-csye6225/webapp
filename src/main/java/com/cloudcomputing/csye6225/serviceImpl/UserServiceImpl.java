@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                logger.error("UserServiceImpl:createNewUser - User already exists in the Database. [ {} ]", HttpStatus.BAD_REQUEST);
+                logger.warn("UserServiceImpl:createNewUser - User already exists in the Database. [ {} ]", HttpStatus.BAD_REQUEST);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","User already exists in the Database."));
             }
         } else {
