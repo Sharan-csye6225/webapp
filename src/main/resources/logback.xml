@@ -2,7 +2,7 @@
 <configuration>
 
     <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/cloud/webapp.log</file>
+        <file>var/log/cloud/webapp.log</file>
         <append>true</append>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
