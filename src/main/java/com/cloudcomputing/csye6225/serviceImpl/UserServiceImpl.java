@@ -1,6 +1,5 @@
 package com.cloudcomputing.csye6225.serviceImpl;
 
-import org.slf4j.Logger;
 import com.cloudcomputing.csye6225.dtos.UserDetailsResponseDto;
 import com.cloudcomputing.csye6225.model.User;
 import com.cloudcomputing.csye6225.repository.UserRepository;
@@ -11,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
-
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -75,10 +74,11 @@ public class UserServiceImpl implements UserService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                logger.warn("UserServiceImpl:createNewUser - User already exists in the Database. [ {} ]", HttpStatus.BAD_REQUEST);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","User already exists in the Database."));
+                logger.error("UserServiceImpl:createNewUser - User already exists in the Database. [ {} ]", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User already exists in the Database."));
             }
         } else {
+            if(!StringUtils.isAllEmpty(user.getAccountCreated(), user.getAccountUpdated())) logger.warn("UserServiceImpl:createNewUser - Account creation / update time need not be given.");
             logger.error("UserServiceImpl:createNewUser - The Request doesn't have the required or has incorrect values. [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
@@ -114,8 +114,8 @@ public class UserServiceImpl implements UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
             }
         } else {
-            logger.warn("UserServiceImpl:getUserDetails - The Username / Password is incorrect. [ {} ]", HttpStatus.UNAUTHORIZED);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
+            logger.error("UserServiceImpl:getUserDetails - The Username / Password is incorrect. If new user, please create the user. [ {} ]", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "Username / Password is incorrect"));
         }
     }
 
@@ -154,12 +154,13 @@ public class UserServiceImpl implements UserService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                logger.info("UserServiceImpl:updateUserDetails -  Invalid Request Body - Restricted field values are tried to be updated. [ {} ]", HttpStatus.BAD_REQUEST);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Invalid Request Body."));
+                if (!StringUtils.isEmpty(user.getUsername())) logger.warn("UserServiceImpl:updateUserDetails - The Username can not be updated. [ {} ]", HttpStatus.BAD_REQUEST);
+                logger.error("UserServiceImpl:updateUserDetails -  Invalid Request Body - Restricted field values are tried to be updated. [ {} ]", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "Invalid Request Body."));
             }
         } else {
-            logger.warn("UserServiceImpl:updateUserDetails - The Username / Password is incorrect. [ {} ]", HttpStatus.UNAUTHORIZED);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status","Username / Password is incorrect"));
+            logger.error("UserServiceImpl:updateUserDetails - The Username / Password is incorrect. If new user, please create the user. [ {} ]", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "Username / Password is incorrect"));
         }
 
     }
@@ -180,9 +181,9 @@ public class UserServiceImpl implements UserService {
 
             User userFromDb = userRepository.findByUsername(username);
             if (null != userFromDb) {
-                if (passwordEncoder.matches(password, userFromDb.getPassword())) {
-                    return userFromDb;
-                }
+                if (passwordEncoder.matches(password, userFromDb.getPassword())) return userFromDb;
+                else
+                    logger.warn("UserServiceImpl:isBasicAuthenticated - The Username & Password doesn't match. [ {} ]");
             }
         }
         return null;
