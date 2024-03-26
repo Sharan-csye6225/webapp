@@ -1,7 +1,10 @@
 package com.cloudcomputing.csye6225.integrationtest;
 
+import com.cloudcomputing.csye6225.model.User;
+import com.cloudcomputing.csye6225.repository.UserRepository;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -11,6 +14,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserIntegrationTest {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @LocalServerPort
     private int port;
@@ -29,6 +35,10 @@ public class UserIntegrationTest {
                 .post("/v1/user")
                 .then()
                 .statusCode(201);
+
+        User userFromDb = userRepository.findByUsername("jane.doe@example.com");
+        userFromDb.setUserVerified(true);
+        userRepository.save(userFromDb);
 
         // Validate User details existence
         given()
