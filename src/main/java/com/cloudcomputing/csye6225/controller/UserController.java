@@ -27,4 +27,9 @@ public class UserController {
     public ResponseEntity<?> updateUserApi(@RequestBody User user, HttpServletRequest request) throws Exception {
         return userService.updateUserDetails(user, request);
     }
+
+    @GetMapping(path = "/v1/user/verification")
+    public void getUserVerificationApi(HttpServletRequest request) throws Exception {
+        userService.getUserVerificationInformation(request);
+    }
 }
