@@ -9,6 +9,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
 @Entity
 @DynamicUpdate
 public class User {
@@ -44,6 +46,21 @@ public class User {
 
     @JsonProperty("account_updated")
     private String accountUpdated;
+
+    @JsonProperty("user_verified")
+    private boolean userVerified;
+
+    @NotNull
+    @Column(name = "user_token", updatable = false)
+    private String userToken;
+
+    @Column(name = "email_sent_time", updatable = false)
+    @JsonProperty("email_sent_time")
+    private String emailSentTime;
+
+    public User() {
+        this.userToken = UUID.randomUUID().toString(); // Generate a random UUID for user token
+    }
 
     public String getId() {
         return id;
@@ -100,5 +117,17 @@ public class User {
     public void setAccountUpdated(String accountUpdated) {
         this.accountUpdated = accountUpdated;
     }
+
+    public boolean getUserVerified() { return userVerified; }
+
+    public void setUserVerified(boolean userVerified) { this.userVerified = userVerified; }
+
+    public String getUserToken() { return userToken; }
+
+    public void setUserToken(String userToken) { this.userToken = userToken; }
+
+    public String getEmailSentTime() { return emailSentTime; }
+
+    public void setEmailSentTime(String emailSentTime) { this.emailSentTime = emailSentTime; }
 
 }

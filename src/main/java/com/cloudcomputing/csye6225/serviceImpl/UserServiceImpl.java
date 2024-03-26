@@ -6,6 +6,7 @@ import com.cloudcomputing.csye6225.repository.UserRepository;
 import com.cloudcomputing.csye6225.service.DatabaseHealthCheckService;
 import com.cloudcomputing.csye6225.service.UserService;
 import com.cloudcomputing.csye6225.utils.CommonUtil;
+import com.cloudcomputing.csye6225.utils.PubSubMessageHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -19,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Set;
@@ -58,13 +61,15 @@ public class UserServiceImpl implements UserService {
         if (violations.isEmpty() && StringUtils.isAllEmpty(user.getAccountCreated(), user.getAccountUpdated(), user.getId())) {
             if (!userRepository.existsByUsername(user.getUsername())) {
                 // Generate and set timestamps
-                user.setAccountCreated(LocalDateTime.now().toString());
-                user.setAccountUpdated(LocalDateTime.now().toString());
+                user.setAccountCreated(LocalDateTime.now(ZoneOffset.UTC).toString());
+                user.setAccountUpdated(LocalDateTime.now(ZoneOffset.UTC).toString());
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setUserVerified(false);
 
                 // Save the user to the database
                 try {
                     User createdUser = userRepository.save(user);
+                    PubSubMessageHandler.publishMessage("csye6225-414009", "verify_email", createdUser.getUsername(), createdUser.getUserToken());
                     UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(createdUser.getId(), createdUser.getFirstName(), createdUser.getLastName(),
                             createdUser.getUsername(), createdUser.getAccountCreated(), createdUser.getAccountUpdated());
                     logger.info("UserServiceImpl:createNewUser - User details created and stored in the DB:  [ {} ]", HttpStatus.CREATED);
@@ -78,7 +83,8 @@ public class UserServiceImpl implements UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User already exists in the Database."));
             }
         } else {
-            if(!StringUtils.isAllEmpty(user.getAccountCreated(), user.getAccountUpdated())) logger.warn("UserServiceImpl:createNewUser - Account creation / update time need not be given.");
+            if (!StringUtils.isAllEmpty(user.getAccountCreated(), user.getAccountUpdated()))
+                logger.warn("UserServiceImpl:createNewUser - Account creation / update time need not be given.");
             logger.error("UserServiceImpl:createNewUser - The Request doesn't have the required or has incorrect values. [ {} ]", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
         }
@@ -86,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> getUserDetails(HttpServletRequest request) {
+    public ResponseEntity<?> getUserDetails(HttpServletRequest request) throws Exception {
 
         logger.debug("**** UserServiceImpl:getUserDetails - 'IN' ****");
 
@@ -104,6 +110,10 @@ public class UserServiceImpl implements UserService {
 
         User userFromDb = this.isBasicAuthenticated(request);
         if (null != userFromDb) {
+
+            if (!CommonUtil.isUserVerified(userFromDb))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
+
             try {
                 UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(userFromDb.getId(), userFromDb.getFirstName(), userFromDb.getLastName(),
                         userFromDb.getUsername(), userFromDb.getAccountCreated(), userFromDb.getAccountUpdated());
@@ -137,6 +147,10 @@ public class UserServiceImpl implements UserService {
         User userFromDb = this.isBasicAuthenticated(request);
 
         if (null != userFromDb) {
+
+            if (!CommonUtil.isUserVerified(userFromDb))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
+
             if (StringUtils.isAllEmpty(user.getUsername(), user.getAccountCreated(), user.getAccountUpdated()) && !user.getFirstName().isBlank() && !user.getLastName().isBlank() && !user.getPassword().isBlank()) {
                 try {
                     if (!StringUtils.isEmpty(user.getFirstName()))
@@ -154,7 +168,8 @@ public class UserServiceImpl implements UserService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(null);
                 }
             } else {
-                if (!StringUtils.isEmpty(user.getUsername())) logger.warn("UserServiceImpl:updateUserDetails - The Username can not be updated. [ {} ]", HttpStatus.BAD_REQUEST);
+                if (!StringUtils.isEmpty(user.getUsername()))
+                    logger.warn("UserServiceImpl:updateUserDetails - The Username can not be updated. [ {} ]", HttpStatus.BAD_REQUEST);
                 logger.error("UserServiceImpl:updateUserDetails -  Invalid Request Body - Restricted field values are tried to be updated. [ {} ]", HttpStatus.BAD_REQUEST);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "Invalid Request Body."));
             }
@@ -163,6 +178,23 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "Username / Password is incorrect"));
         }
 
+    }
+
+    @Override
+    public void getUserVerificationInformation(HttpServletRequest request) throws Exception {
+        if (null != request && null != request.getQueryString()) {
+            String[] queryParams = request.getQueryString().split("&");
+            String username = queryParams[0];
+            String userToken = queryParams[1];
+            User userFromDb = userRepository.findByUsername(username);
+            if (null != userFromDb) {
+                long minutesDiff = Duration.between(LocalDateTime.parse(userFromDb.getAccountCreated()), LocalDateTime.parse(userFromDb.getEmailSentTime())).toMinutes();
+                if (minutesDiff <= 2 && userFromDb.getUserToken().equalsIgnoreCase(userToken)) {
+                    userFromDb.setUserVerified(true);
+                    userRepository.save(userFromDb);
+                }
+            }
+        }
     }
 
     private User isBasicAuthenticated(HttpServletRequest request) {
@@ -183,7 +215,7 @@ public class UserServiceImpl implements UserService {
             if (null != userFromDb) {
                 if (passwordEncoder.matches(password, userFromDb.getPassword())) return userFromDb;
                 else
-                    logger.warn("UserServiceImpl:isBasicAuthenticated - The Username & Password doesn't match. [ {} ]");
+                    logger.warn("UserServiceImpl:isBasicAuthenticated - The Username & Password doesn't match.");
             }
         }
         return null;
