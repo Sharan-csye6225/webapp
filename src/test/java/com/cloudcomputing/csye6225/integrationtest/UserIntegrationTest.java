@@ -30,33 +30,33 @@ public class UserIntegrationTest {
         // Create an User record
         given()
                 .contentType("application/json")
-                .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"jane.doe@example.com\" }")
+                .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"psk141996@gmail.com\" }")
                 .when()
                 .post("/v1/user")
                 .then()
                 .statusCode(201);
 
-        User userFromDb = userRepository.findByUsername("jane.doe@example.com");
+        User userFromDb = userRepository.findByUsername("psk141996@gmail.com");
         userFromDb.setUserVerified(true);
         userRepository.save(userFromDb);
 
         // Validate User details existence
         given()
-                .auth().preemptive().basic("jane.doe@example.com", "test")
+                .auth().preemptive().basic("psk141996@gmail.com", "test")
                 .when()
                 .get("/v1/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane"))
                 .body("lastName", equalTo("Doe"))
-                .body("username", equalTo("jane.doe@example.com"));
+                .body("username", equalTo("psk141996@gmail.com"));
     }
 
     @Test
     public void testUpdateUserDetailsAndValidateUpdateUserDetails() {
         // Update the User record
         given()
-                .auth().preemptive().basic("jane.doe@example.com", "test")
+                .auth().preemptive().basic("psk141996@gmail.com", "test")
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane_changed\", \"last_name\": \"Doe_changed\", \"password\": \"test_changed\" }")
                 .when()
@@ -66,14 +66,14 @@ public class UserIntegrationTest {
 
         // Validate updated User details
         given()
-                .auth().preemptive().basic("jane.doe@example.com", "test_changed")
+                .auth().preemptive().basic("psk141996@gmail.com", "test_changed")
                 .when()
                 .get("/v1/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane_changed"))
                 .body("lastName", equalTo("Doe_changed"))
-                .body("username", equalTo("jane.doe@example.com"));
+                .body("username", equalTo("psk141996@gmail.com"));
     }
 }
 
