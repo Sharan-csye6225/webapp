@@ -32,6 +32,7 @@ public class PubSubMessageHandler {
                 ByteString data = ByteString.copyFromUtf8(msg);
                 PubsubMessage pubsubMessage = PubsubMessage.newBuilder().setData(data).build();
                 ApiFuture<String> future = publisher.publish(pubsubMessage);
+                System.out.println("pubsubMessage : " + pubsubMessage);
                 ApiFutures.addCallback(
                         future,
                         new ApiFutureCallback<String>() {
