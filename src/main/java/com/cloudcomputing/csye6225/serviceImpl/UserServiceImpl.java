@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private Validator validator;
+    @Value("gcp.project.name")
+    private String gcpProjectName;
+    @Value("gcp.pubsub.topic.name")
+    private String gcpPubSubTopicName;
 
     @Override
     public ResponseEntity<?> createNewUser(User user, HttpServletRequest request) {
@@ -69,9 +74,9 @@ public class UserServiceImpl implements UserService {
                 // Save the user to the database
                 try {
                     User createdUser = userRepository.save(user);
-                    PubSubMessageHandler.publishMessage("csye6225-414009", "verify_email", createdUser.getUsername(), createdUser.getUserToken());
-                    UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(createdUser.getId(), createdUser.getFirstName(), createdUser.getLastName(),
-                            createdUser.getUsername(), createdUser.getAccountCreated(), createdUser.getAccountUpdated());
+                    PubSubMessageHandler.publishMessage(gcpProjectName, gcpPubSubTopicName, createdUser.getUsername(), createdUser.getUserToken());
+                            UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(createdUser.getId(), createdUser.getFirstName(), createdUser.getLastName(),
+                                    createdUser.getUsername(), createdUser.getAccountCreated(), createdUser.getAccountUpdated());
                     logger.info("UserServiceImpl:createNewUser - User details created and stored in the DB:  [ {} ]", HttpStatus.CREATED);
                     return ResponseEntity.status(HttpStatus.CREATED).headers(CommonUtil.setHeaders()).body(userCreationResponseDto);
                 } catch (Exception e) {

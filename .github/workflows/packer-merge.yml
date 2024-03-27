@@ -55,6 +55,8 @@ jobs:
           MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
           MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
           MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
+          GCP_PUBSUB_TOPIC_NAME: ${{ secrets.GCP_PUBSUB_TOPIC_NAME }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
