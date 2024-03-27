@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void getUserVerificationInformation(HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> getUserVerificationInformation(HttpServletRequest request) throws Exception {
         if (null != request && null != request.getQueryString()) {
             String[] queryParams = request.getQueryString().split("&");
             String username = queryParams[0];
@@ -197,9 +197,15 @@ public class UserServiceImpl implements UserService {
                 if (minutesDiff <= 2 && userFromDb.getUserToken().equalsIgnoreCase(userToken)) {
                     userFromDb.setUserVerified(true);
                     userRepository.save(userFromDb);
+                    logger.info("UserServiceImpl:getUserVerificationInformation - The Username details are verified. [ {} ]", HttpStatus.OK);
+                    return ResponseEntity.status(HttpStatus.OK).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "The User details are verified"));
+                } else {
+                    logger.error("UserServiceImpl:getUserVerificationInformation - The link has expired, hence the user details are not verified. Please contact the administrator [ {} ]", HttpStatus.BAD_REQUEST);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "The link has expired, hence the user details are not verified. Please contact the administrator"));
                 }
             }
         }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "The link has expired, hence the user details are not verified. Please contact the administrator"));
     }
 
     private User isBasicAuthenticated(HttpServletRequest request) {

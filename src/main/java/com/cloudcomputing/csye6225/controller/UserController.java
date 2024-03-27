@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/v1/user/verification")
-    public void getUserVerificationApi(HttpServletRequest request) throws Exception {
-        userService.getUserVerificationInformation(request);
+    public ResponseEntity<?> getUserVerificationApi(HttpServletRequest request) throws Exception {
+        return userService.getUserVerificationInformation(request);
     }
 }

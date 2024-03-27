@@ -12,6 +12,6 @@ public interface UserService {
 
     ResponseEntity<?> updateUserDetails(User user, HttpServletRequest request) throws Exception;
 
-    void getUserVerificationInformation(HttpServletRequest request) throws Exception;
+    ResponseEntity<?> getUserVerificationInformation(HttpServletRequest request) throws Exception;
 
 }
