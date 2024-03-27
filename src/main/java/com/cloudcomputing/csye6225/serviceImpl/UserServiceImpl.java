@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService {
             String userToken = queryParams[1];
             User userFromDb = userRepository.findByUsername(username);
             if (null != userFromDb) {
-                long minutesDiff = Duration.between(LocalDateTime.parse(userFromDb.getAccountCreated()), LocalDateTime.parse(userFromDb.getEmailSentTime())).toMinutes();
+                long minutesDiff = Duration.between(LocalDateTime.parse(userFromDb.getEmailSentTime()), LocalDateTime.now(ZoneOffset.UTC)).toMinutes();
                 if (minutesDiff <= 2 && userFromDb.getUserToken().equalsIgnoreCase(userToken)) {
                     userFromDb.setUserVerified(true);
                     userRepository.save(userFromDb);
