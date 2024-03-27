@@ -30,6 +30,17 @@ jobs:
           sudo apt update
           sudo apt install maven -y
 
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: Use gcloud CLI
+        run: 'gcloud info'
+
       - name: Build Application with Maven and Run Integration Test
         run: |
           echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
@@ -44,17 +55,6 @@ jobs:
           MYSQL_DB_DATABASE: ${{ secrets.MYSQL_DB_DATABASE }}
           MYSQL_DB_HOST: ${{ secrets.MYSQL_DB_HOST }}
           MYSQL_DB_PORT: ${{ secrets.MYSQL_DB_PORT }}
-
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      - name: Set up Cloud SDK
-        uses: 'google-github-actions/setup-gcloud@v2'
-
-      - name: Use gcloud CLI
-        run: 'gcloud info'
 
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
