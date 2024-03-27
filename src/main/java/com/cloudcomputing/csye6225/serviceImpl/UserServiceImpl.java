@@ -41,9 +41,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private Validator validator;
-    @Value("${gcp.project.name}")
+    @Value("gcp.project.name")
     private String gcpProjectName;
-    @Value("${gcp.pubsub.topic.name}")
+    @Value("gcp.pubsub.topic.name")
     private String gcpPubSubTopicName;
 
     @Override
