@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
         if (null != userFromDb) {
 
             if (!CommonUtil.isUserVerified(userFromDb))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
 
             try {
                 UserDetailsResponseDto userCreationResponseDto = new UserDetailsResponseDto(userFromDb.getId(), userFromDb.getFirstName(), userFromDb.getLastName(),
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
         if (null != userFromDb) {
 
             if (!CommonUtil.isUserVerified(userFromDb))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(CommonUtil.setHeaders()).body(Collections.singletonMap("status", "User not verified"));
 
             if (StringUtils.isAllEmpty(user.getUsername(), user.getAccountCreated(), user.getAccountUpdated()) && !user.getFirstName().isBlank() && !user.getLastName().isBlank() && !user.getPassword().isBlank()) {
                 try {
