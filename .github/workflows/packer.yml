@@ -64,9 +64,9 @@ jobs:
           echo "MYSQL_DB_DATABASE=${{ secrets.MYSQL_DB_DATABASE }}" >> .env
           echo "MYSQL_DB_HOST=${{ secrets.MYSQL_DB_HOST }}" >> .env
           echo "MYSQL_DB_PORT=${{ secrets.MYSQL_DB_PORT }}" >> .env
-          echo "LOG_FILE_PATH:  ${{ secrets.LOG_FILE_PATH }}" >> .env
-          echo "GCP_PUBSUB_TOPIC_NAME:  ${{ secrets.GCP_PUBSUB_TOPIC_NAME }}" >> .env
-          echo "GCP_PROJECT_ID:  ${{ secrets.GCP_PROJECT_ID }}" >> .env
+          echo "LOG_FILE_PATH=${{ secrets.LOG_FILE_PATH }}" >> .env
+          echo "GCP_PUBSUB_TOPIC_NAME={{ secrets.GCP_PUBSUB_TOPIC_NAME }}" >> .env
+          echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> .env
           cat .env
           cp .env packer
           cd packer && ls -al
