@@ -164,7 +164,7 @@ jobs:
           random_number=${{ steps.random_number.outputs.random_number }}
           instance_template="test-instance-template-${random_number}"  
           gcloud compute instance-groups managed set-instance-template csye6225-instance-group-manager --template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1
-          gcloud compute instance-groups managed rolling-action start-update csye6225-instance-group-manager --version=template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1
+          gcloud compute instance-groups managed rolling-action start-update csye6225-instance-group-manager --version=template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1 --replacement-method=substitute
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
