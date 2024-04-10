@@ -139,7 +139,7 @@ jobs:
           --network-interface=subnet=${{ secrets.SUBNET }},network=${{ secrets.NETWORK }},network-tier=${{ secrets.NETWORK_TIER }} \
           --service-account=${{ secrets.VM_SERVICE_ACCOUNT }} \
           --scopes=${{ secrets.VM_SCOPES }} \
-          --boot-disk-kms-key=projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.REGION }}/keyRings/${{ secrets.KEY_RING }}/cryptoKeys/{{ secrets.VM_KEY }} \
+          --boot-disk-kms-key=projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.REGION }}/keyRings/${{ secrets.KEY_RING }}/cryptoKeys/${{ secrets.VM_KEY }} \
           --metadata=startup-script="#! /bin/bash
           echo 'Startup script'
           cd /opt/cloud
