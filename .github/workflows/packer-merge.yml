@@ -159,3 +159,16 @@ jobs:
           GCP_PUBSUB_TOPIC_NAME: ${{ secrets.GCP_PUBSUB_TOPIC_NAME }}
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
+      - name: Update the Managed Instance Group with the new Instance Template and Start rolling update for the VMs
+        run: |
+          random_number=${{ steps.random_number.outputs.random_number }}
+          instance_template="test-instance-template-${random_number}"  
+          gcloud compute instance-groups managed set-instance-template csye6225-instance-group-manager --template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1
+          gcloud compute instance-groups managed rolling-action start-update csye6225-instance-group-manager --version=template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Wait Until the Managed Instance Group refresh for all the VMs are complete
+          run: |
+            gcloud compute instance-groups managed wait-until csye6225-instance-group-manager --version-target-reached --region=us-east1
+
