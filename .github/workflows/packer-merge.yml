@@ -136,7 +136,7 @@ jobs:
           --boot-disk-auto-delete \
           --boot-disk-type=${{ secrets.DISK_TYPE }} \
           --boot-disk-size=${{ secrets.DISK_SIZE }} \
-          --network-interface=subnet=${{ secrets.SUBNET }},network=${{ secrets.NETWORK }},network-tier=${{ secrets.NETWORK_TIER }} \
+          --network-interface=subnet=${{ secrets.SUBNET_PROD }},network=${{ secrets.NETWORK_PROD }},network-tier=${{ secrets.NETWORK_TIER }} \
           --service-account=${{ secrets.VM_SERVICE_ACCOUNT }} \
           --scopes=${{ secrets.VM_SCOPES }} \
           --boot-disk-kms-key=projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.REGION }}/keyRings/${{ secrets.KEY_RING }}/cryptoKeys/${{ secrets.VM_KEY }} \
