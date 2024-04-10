@@ -138,7 +138,7 @@ jobs:
           --boot-disk-size=20 \
           --network-interface=subnet=projects/csye6225-414009/regions/us-east1/subnetworks/csye6225-dev-vpc-webapp,network=projects/csye6225-414009/global/networks/csye6225-dev-vpc,network-tier=PREMIUM \
           --service-account=vm-service-account@csye6225-414009.iam.gserviceaccount.com \
-          ---boot-disk-kms-key=projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.REGION }}/keyRings/my-key-ring-1/cryptoKeys/vm-crypto-key \  
+          --boot-disk-kms-key=projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.REGION }}/keyRings/my-key-ring-1/cryptoKeys/vm-crypto-key \  
           --metadata=startup-script="#! /bin/bash
             echo 'Startup script'
             cd /opt/cloud
