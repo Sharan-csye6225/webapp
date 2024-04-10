@@ -159,16 +159,3 @@ jobs:
           GCP_PUBSUB_TOPIC_NAME: ${{ secrets.GCP_PUBSUB_TOPIC_NAME }}
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Update the Managed Instance Group with the new Instance Template
-          run: |
-            random_number=${{ steps.random_number.outputs.random_number }}
-            instance_template="test-instance-template-${random_number}"  
-            gcloud compute instance-groups managed set-instance-template webapp-instance-group-manager --template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template --region=us-east1
-          env:
-            GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-            
-            gcloud compute instance-groups managed rolling-action start-update webapp-instance-group-manager --version="template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/us-east1/instanceTemplates/$instance_template" --region=us-east1
-
-
-            
-            
