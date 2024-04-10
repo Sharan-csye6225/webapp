@@ -126,7 +126,7 @@ jobs:
           latest_image_path="projects/${{ secrets.GCP_PROJECT_ID }}/global/images/$latest_image_name"
           
           gcloud compute instance-templates create $instance_template \
-          --description=${{ secrets.GCP_TEMPLATE_DESCRIPTION }} \
+          --description="${{ secrets.GCP_TEMPLATE_DESCRIPTION }}" \
           --region=${{ secrets.REGION }} \
           --instance-template-region=${{ secrets.REGION }} \
           --machine-type=${{ secrets.MACHINE_TYPE }} \
