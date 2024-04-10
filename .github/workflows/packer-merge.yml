@@ -161,6 +161,6 @@ jobs:
 
       - name: Wait Until the Managed Instance Group refresh for all the VMs are complete
         run: |
-          gcloud compute instance-groups managed wait-until csye6225-instance-group-manager ${{ secrets.GCP_INSTANCE_GROUP }} --version-target-reached --region=${{ secrets.REGION }}
+          gcloud compute instance-groups managed wait-until ${{ secrets.GCP_INSTANCE_GROUP }} --version-target-reached --region=${{ secrets.REGION }}
       
 
