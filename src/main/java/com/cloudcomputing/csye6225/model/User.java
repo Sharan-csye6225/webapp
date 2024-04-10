@@ -58,6 +58,10 @@ public class User {
     @JsonProperty("email_sent_time")
     private String emailSentTime;
 
+    @Column(name = "email_expiry_time", updatable = false)
+    @JsonProperty("email_expiry_time")
+    private String emailExpiryTime;
+
     public User() {
         this.userToken = UUID.randomUUID().toString(); // Generate a random UUID for user token
     }
@@ -129,5 +133,9 @@ public class User {
     public String getEmailSentTime() { return emailSentTime; }
 
     public void setEmailSentTime(String emailSentTime) { this.emailSentTime = emailSentTime; }
+
+    public String getEmailExpiryTime() { return emailExpiryTime; }
+
+    public void setEmailExpiryTime(String emailExpiryTime) { this.emailExpiryTime = emailExpiryTime; }
 
 }
