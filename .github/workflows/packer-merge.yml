@@ -119,13 +119,13 @@ jobs:
 
       - name: Create new Instance Template
         run: |
-          random_number=$(echo ${{ steps.random_number.outputs.random_number }})
+          random_number=${{ steps.random_number.outputs.random_number }}
           instance_template="test-instance-template-${random_number}"
           latest_image_name=$(gcloud compute images list --no-standard-images --format="table(NAME,CREATION_TIMESTAMP)" --sort-by="CREATION_TIMESTAMP" | tail -n 1)
-          echo "${latest_image_name}"
-          latest_image_path="projects/${{ secrets.GCP_PROJECT_ID }}/global/images/${latest_image_name}"
+          echo "$latest_image_name"
+          latest_image_path="projects/${{ secrets.GCP_PROJECT_ID }}/global/images/$latest_image_name"
           
-          sudo /Users/sharankumar/Courses/CSYE_6225_Cloud_Computing/GCP_Cloud/google-cloud-sdk/bin/gcloud compute instance-templates create $instance_template \
+          gcloud compute instance-templates create $instance_template \
           --description="Test Instance Template Description" \
           --region=us-east1 \
           --instance-template-region=us-east1 \
