@@ -13,22 +13,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/v1/user")
+    @PostMapping(path = "/v5/user")
     public ResponseEntity<?> createUserApi(@RequestBody User user, HttpServletRequest request) throws Exception {
         return userService.createNewUser(user, request);
     }
 
-    @GetMapping(path = "/v1/user/self")
+    @GetMapping(path = "/v5/user/self")
     public ResponseEntity<?> getUserDetailsApi(HttpServletRequest request) throws Exception {
         return userService.getUserDetails(request);
     }
 
-    @PutMapping(path = "/v1/user/self")
+    @PutMapping(path = "/v5/user/self")
     public ResponseEntity<?> updateUserApi(@RequestBody User user, HttpServletRequest request) throws Exception {
         return userService.updateUserDetails(user, request);
     }
 
-    @GetMapping(path = "/v1/user/verification")
+    @GetMapping(path = "/v5/user/verification")
     public ResponseEntity<?> getUserVerificationApi(HttpServletRequest request) throws Exception {
         return userService.getUserVerificationInformation(request);
     }
