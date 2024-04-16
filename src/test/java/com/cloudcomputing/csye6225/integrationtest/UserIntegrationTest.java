@@ -32,7 +32,7 @@ public class UserIntegrationTest {
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"test\", \"username\": \"psk141996@gmail.com\" }")
                 .when()
-                .post("/v1/user")
+                .post("/v5/user")
                 .then()
                 .statusCode(201);
 
@@ -44,7 +44,7 @@ public class UserIntegrationTest {
         given()
                 .auth().preemptive().basic("psk141996@gmail.com", "test")
                 .when()
-                .get("/v1/user/self")
+                .get("/v5/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane"))
@@ -60,7 +60,7 @@ public class UserIntegrationTest {
                 .contentType("application/json")
                 .body("{ \"first_name\": \"Jane_changed\", \"last_name\": \"Doe_changed\", \"password\": \"test_changed\" }")
                 .when()
-                .put("/v1/user/self")
+                .put("/v5/user/self")
                 .then()
                 .statusCode(204);
 
@@ -68,7 +68,7 @@ public class UserIntegrationTest {
         given()
                 .auth().preemptive().basic("psk141996@gmail.com", "test_changed")
                 .when()
-                .get("/v1/user/self")
+                .get("/v5/user/self")
                 .then()
                 .statusCode(200)
                 .body("firstName", equalTo("Jane_changed"))
